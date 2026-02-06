@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator - Product Traceability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .qr-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .qr-item {
+            text-align: center;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 15px;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .qr-item:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            transition: all 0.3s;
+        }
+        
+        .product-emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .product-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+        
+        .batch-id {
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 15px;
+        }
+        
+        .qr-canvas {
+            margin: 20px auto;
+            border: 5px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .download-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            margin-top: 10px;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .download-btn:hover {
+            background: #5568d3;
+        }
+        
+        .instructions {
+            background: #edf2f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .instructions ol {
+            padding-left: 20px;
+            color: #4a5568;
+            line-height: 1.8;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .url-display {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #667eea;
+            word-break: break-all;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌾 Product Traceability QR Codes</h1>
+            <p>Scan these QR codes to see complete product journey</p>
+        </div>
+        
+        <div class="card">
+            <div class="qr-grid">
+                <div class="qr-item">
+                    <div class="product-emoji">🍅</div>
+                    <div class="product-title">Organic Tomatoes</div>
+                    <div class="batch-id">Batch: ORG001</div>
+                    <div id="qr1" class="qr-canvas"></div>
+                    <button class="download-btn" onclick="downloadQR('qr1', 'Tomatoes_ORG001')">Download QR Code</button>
+                    <div class="url-display" id="url1"></div>
+                </div>
+                
+                <div class="qr-item">
+                    <div class="product-emoji">🌾</div>
+                    <div class="product-title">Premium Rice</div>
+                    <div class="batch-id">Batch: ORG002</div>
+                    <div id="qr2" class="qr-canvas"></div>
+                    <button class="download-btn" onclick="downloadQR('qr2', 'Rice_ORG002')">Download QR Code</button>
+                    <div class="url-display" id="url2"></div>
+                </div>
+                
+                <div class="qr-item">
+                    <div class="product-emoji">🥭</div>
+                    <div class="product-title">Fresh Mangoes</div>
+                    <div class="batch-id">Batch: ORG003</div>
+                    <div id="qr3" class="qr-canvas"></div>
+                    <button class="download-btn" onclick="downloadQR('qr3', 'Mangoes_ORG003')">Download QR Code</button>
+                    <div class="url-display" id="url3"></div>
+                </div>
+            </div>
+            
+            <div class="instructions">
+                <h3>📱 How to Use These QR Codes:</h3>
+                <ol>
+                    <li><strong>Download</strong> the QR code images by clicking the download buttons</li>
+                    <li><strong>Print</strong> the QR codes on sticker paper or labels</li>
+                    <li><strong>Stick</strong> them on your product packaging</li>
+                    <li><strong>Customers scan</strong> with their phone camera - it opens automatically!</li>
+                    <li><strong>They see</strong> complete product information including farmer, processor, dates</li>
+                </ol>
+                <p style="margin-top: 15px; color: #4a5568;">
+                    <strong>Note:</strong> Right now these QR codes point to a demo file on your computer. 
+                    To make them work for customers, you need to upload the traceability.html file 
+                    to a free hosting service (like GitHub Pages, Google Drive, or Netlify).
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate QR codes when page loads
+        window.onload = function() {
+            // For demo, using a placeholder URL - you'll replace this with your actual hosted URL
+            const baseURL = "https://yourwebsite.com/traceability.html?product=";
+            
+            const products = [
+                { id: 'ORG001', qrDiv: 'qr1', urlDiv: 'url1' },
+                { id: 'ORG002', qrDiv: 'qr2', urlDiv: 'url2' },
+                { id: 'ORG003', qrDiv: 'qr3', urlDiv: 'url3' }
+            ];
+            
+            products.forEach(product => {
+                const url = baseURL + product.id;
+                
+                // Generate QR code
+                new QRCode(document.getElementById(product.qrDiv), {
+                    text: url,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Display URL
+                document.getElementById(product.urlDiv).textContent = url;
+            });
+        };
+        
+        function downloadQR(qrId, filename) {
+            const canvas = document.querySelector(`#${qrId} canvas`);
+            const url = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.download = filename + '.png';
+            link.href = url;
+            link.click();
+        }
+    </script>
+</body>
+</html>

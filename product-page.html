@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Traceability</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .product-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .product-image {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            border-radius: 20px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+        
+        .product-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .batch-number {
+            display: inline-block;
+            background: #edf2f7;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #4a5568;
+            font-weight: 600;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: #667eea;
+            border-radius: 2px;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #718096;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            color: #2d3748;
+            font-weight: 600;
+            text-align: right;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 10px;
+            bottom: 10px;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -26px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+        
+        .timeline-date {
+            font-size: 12px;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-content {
+            font-size: 14px;
+            color: #2d3748;
+            font-weight: 500;
+        }
+        
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #48bb78;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 20px;
+        }
+        
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #e53e3e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="productCard">
+            <div class="error-message">Loading product information...</div>
+        </div>
+    </div>
+
+    <script>
+        const products = {
+            'ORG001': {
+                name: 'Organic Tomatoes',
+                emoji: '🍅',
+                batch: 'ORG001',
+                farmer: {
+                    name: 'Rajesh Kumar',
+                    farm: 'Green Valley Organic Farm',
+                    location: 'Punjab, India',
+                    farmSize: '5 acres',
+                    certification: 'Organic Certified'
+                },
+                harvest: {
+                    date: 'January 15, 2026',
+                    method: 'Hand-picked',
+                    quality: 'Grade A Premium'
+                },
+                processor: {
+                    name: 'Fresh Agro Processing Ltd',
+                    location: 'Ludhiana, Punjab',
+                    license: 'FSSAI-12345678',
+                    processDate: 'January 16, 2026'
+                },
+                packaging: {
+                    date: 'January 17, 2026',
+                    type: 'Eco-friendly packaging',
+                    weight: '500g',
+                    expiry: 'January 27, 2026'
+                },
+                timeline: [
+                    { date: 'Jan 15, 2026', event: 'Harvested from Green Valley Organic Farm' },
+                    { date: 'Jan 16, 2026', event: 'Quality inspection and cleaning at Fresh Agro Processing' },
+                    { date: 'Jan 17, 2026', event: 'Packaged and labeled for distribution' },
+                    { date: 'Jan 18, 2026', event: 'Shipped to retail stores' }
+                ]
+            },
+            'ORG002': {
+                name: 'Premium Basmati Rice',
+                emoji: '🌾',
+                batch: 'ORG002',
+                farmer: {
+                    name: 'Suresh Patel',
+                    farm: 'Golden Fields Farm',
+                    location: 'Haryana, India',
+                    farmSize: '12 acres',
+                    certification: 'ISO 22000 Certified'
+                },
+                harvest: {
+                    date: 'December 20, 2025',
+                    method: 'Mechanized harvesting',
+                    quality: 'Premium Grade'
+                },
+                processor: {
+                    name: 'Grain Masters Mill',
+                    location: 'Karnal, Haryana',
+                    license: 'FSSAI-87654321',
+                    processDate: 'December 28, 2025'
+                },
+                packaging: {
+                    date: 'January 5, 2026',
+                    type: 'Vacuum sealed bags',
+                    weight: '5kg',
+                    expiry: 'July 5, 2026'
+                },
+                timeline: [
+                    { date: 'Dec 20, 2025', event: 'Harvested from Golden Fields Farm' },
+                    { date: 'Dec 28, 2025', event: 'Milling and processing at Grain Masters Mill' },
+                    { date: 'Jan 5, 2026', event: 'Quality grading and vacuum packaging' },
+                    { date: 'Jan 10, 2026', event: 'Distributed to retail partners' }
+                ]
+            },
+            'ORG003': {
+                name: 'Fresh Alphonso Mangoes',
+                emoji: '🥭',
+                batch: 'ORG003',
+                farmer: {
+                    name: 'Priya Deshmukh',
+                    farm: 'Konkan Mango Orchards',
+                    location: 'Ratnagiri, Maharashtra',
+                    farmSize: '8 acres',
+                    certification: 'GI Tagged Alphonso'
+                },
+                harvest: {
+                    date: 'January 10, 2026',
+                    method: 'Hand-picked at optimal ripeness',
+                    quality: 'Export Quality'
+                },
+                processor: {
+                    name: 'Tropical Fruit Processing Co.',
+                    location: 'Ratnagiri, Maharashtra',
+                    license: 'FSSAI-45678912',
+                    processDate: 'January 11, 2026'
+                },
+                packaging: {
+                    date: 'January 12, 2026',
+                    type: 'Protective foam packaging',
+                    weight: '1 dozen (approx 3kg)',
+                    expiry: 'January 22, 2026'
+                },
+                timeline: [
+                    { date: 'Jan 10, 2026', event: 'Hand-picked from Konkan Mango Orchards' },
+                    { date: 'Jan 11, 2026', event: 'Sorting and grading at processing facility' },
+                    { date: 'Jan 12, 2026', event: 'Careful packaging with protective foam' },
+                    { date: 'Jan 13, 2026', event: 'Shipped with temperature control' }
+                ]
+            }
+        };
+
+        function getUrlParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function loadProduct() {
+            const productId = getUrlParameter('product');
+            
+            if (!productId || !products[productId]) {
+                document.getElementById('productCard').innerHTML = `
+                    <div class="error-message">
+                        <h2>Product Not Found</h2>
+                        <p>Please scan a valid QR code</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const product = products[productId];
+            
+            const html = `
+                <div class="product-header">
+                    <div class="product-image">${product.emoji}</div>
+                    <div class="product-name">${product.name}</div>
+                    <span class="batch-number">Batch: ${product.batch}</span>
+                    <div class="verified-badge">
+                        <span>✓</span>
+                        <span>Verified & Traceable</span>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">👨‍🌾 Farmer Information</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Farmer Name</span>
+                            <span class="info-value">${product.farmer.name}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Farm Name</span>
+                            <span class="info-value">${product.farmer.farm}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Location</span>
+                            <span class="info-value">${product.farmer.location}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Farm Size</span>
+                            <span class="info-value">${product.farmer.farmSize}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Certification</span>
+                            <span class="info-value">${product.farmer.certification}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🌱 Harvest Details</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Harvest Date</span>
+                            <span class="info-value">${product.harvest.date}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Method</span>
+                            <span class="info-value">${product.harvest.method}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Quality Grade</span>
+                            <span class="info-value">${product.harvest.quality}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">🏭 Processing Information</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Processor</span>
+                            <span class="info-value">${product.processor.name}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Location</span>
+                            <span class="info-value">${product.processor.location}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">License No.</span>
+                            <span class="info-value">${product.processor.license}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Processing Date</span>
+                            <span class="info-value">${product.processor.processDate}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📦 Packaging Details</div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">Packaging Date</span>
+                            <span class="info-value">${product.packaging.date}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Package Type</span>
+                            <span class="info-value">${product.packaging.type}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Net Weight</span>
+                            <span class="info-value">${product.packaging.weight}</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Best Before</span>
+                            <span class="info-value">${product.packaging.expiry}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📍 Product Journey</div>
+                    <div class="timeline">
+                        ${product.timeline.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-date">${item.date}</div>
+                                <div class="timeline-content">${item.event}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('productCard').innerHTML = html;
+        }
+
+        loadProduct();
+    </script>
+</body>
+</html>
